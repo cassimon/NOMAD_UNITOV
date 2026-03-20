@@ -27,8 +27,6 @@ dependencies = ["nomad-lab[infrastructure]>=1.4.1"]
 repository = "https://github.com/cassimon/nomad_unitov"
 
 [project.optional-dependencies]
-# Add your plugins to the list below.
-[project.optional-dependencies]
 plugins = [
   "nomad-material-processing>=1.0.0",
   "nomad-north-jupyter>=0.1.0",
