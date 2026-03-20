@@ -29,7 +29,6 @@ repository = "https://github.com/cassimon/nomad_unitov"
 [project.optional-dependencies]
 # Add your plugins to the list below.
 plugins = [
- "nomad-north-jupyter>=0.2.1",
  "optical-constant-plugin @ git+https://github.com/GeGi94/optical-constant-plugin",
   ]
 jupyter = ["jupyter-events"]
