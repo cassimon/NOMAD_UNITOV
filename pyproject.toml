@@ -34,8 +34,10 @@ plugins = [
 jupyter = ["jupyter-events"]
 gpu-action = []
 cpu-action = []
-test = ["pytest"]
-dev = ["nomad-lab[infrastructure, dev]"]
+dev = [
+"nomad-lab[infrastructure, dev]",
+"pytest",
+ ]
 
 [tool.uv]
 extra-index-url = [
