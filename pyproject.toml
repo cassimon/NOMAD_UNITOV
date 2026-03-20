@@ -30,7 +30,6 @@ repository = "https://github.com/cassimon/nomad_unitov"
 # Add your plugins to the list below.
 plugins = [
  "optical-constant-plugin @ git+https://github.com/GeGi94/optical-constant-plugin",
- "nomad-material-processing>=1.0.0"
   ]
 jupyter = ["jupyter-events"]
 gpu-action = []
