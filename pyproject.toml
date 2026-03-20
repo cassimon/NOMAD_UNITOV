@@ -35,7 +35,7 @@ plugins = [
 jupyter = ["jupyter-events"]
 gpu-action = []
 cpu-action = []
-test = [pytest]
+test = ["pytest"]
 dev = ["nomad-lab[infrastructure, dev]"]
 
 [tool.uv]
