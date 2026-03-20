@@ -2224,6 +2224,7 @@ jupyter = [
 ]
 plugins = [
     { name = "nomad-north-jupyter" },
+    { name = "optical-constant-plugin" },
 ]
 
 [package.metadata]
@@ -2232,6 +2233,7 @@ requires-dist = [
     { name = "nomad-lab", extras = ["dev", "infrastructure"], marker = "extra == 'dev'" },
     { name = "nomad-lab", extras = ["infrastructure"], specifier = ">=1.4.1" },
     { name = "nomad-north-jupyter", marker = "extra == 'plugins'", specifier = ">=0.2.1" },
+    { name = "optical-constant-plugin", marker = "extra == 'plugins'", git = "https://github.com/GeGi94/optical-constant-plugin" },
 ]
 provides-extras = ["plugins", "jupyter", "gpu-action", "cpu-action", "dev"]
 
@@ -2402,6 +2404,14 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/3d/f9/88d94a75de065ea32619465d2f77b29a0469500e99012523b91cc4141cd1/openpyxl-3.1.5.tar.gz", hash = "sha256:cf0e3cf56142039133628b5acffe8ef0c12bc902d2aadd3e0fe5878dc08d1050", size = 186464, upload-time = "2024-06-28T14:03:44.161Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c0/da/977ded879c29cbd04de313843e76868e6e13408a94ed6b987245dc7c8506/openpyxl-3.1.5-py2.py3-none-any.whl", hash = "sha256:5282c12b107bffeef825f4617dc029afaf41d0ea60823bbb665ef3079dc79de2", size = 250910, upload-time = "2024-06-28T14:03:41.161Z" },
+]
+
+[[package]]
+name = "optical-constant-plugin"
+version = "0.1.0"
+source = { git = "https://github.com/GeGi94/optical-constant-plugin#b6dbb3d81f11c327e2aecc4b318dce2c1299db1d" }
+dependencies = [
+    { name = "nomad-lab" },
 ]
 
 [[package]]
