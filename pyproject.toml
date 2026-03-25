@@ -29,7 +29,11 @@ repository = "https://github.com/cassimon/nomad_unitov"
 [project.optional-dependencies]
 # Add your plugins to the list below.
 plugins = [
- "nomad-north-jupyter>=0.2.1"
+ "nomad-north-jupyter>=0.2.1",
+ "optical-coefficients @ git+https://github.com/cassimon/optical-coefficients-plugin.git@7fa57b77220b261bd4edc9744c29c6a9a6df3d52",
+]
+
+
   ]
 jupyter = ["jupyter-events"]
 gpu-action = []
