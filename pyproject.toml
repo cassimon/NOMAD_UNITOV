@@ -33,6 +33,7 @@ plugins = [
  "optical-coefficients-plugin @ git+https://github.com/cassimon/optical-coefficients-plugin.git@7fa57b77220b261bd4edc9744c29c6a9a6df3d52",
  "nomad-measurements @ git+https://github.com/FAIRmat-NFDI/nomad-measurements.git@v0.0.4",
  "nomad-baseclasses @ git+https://github.com/nomad-hzb/nomad-baseclasses.git@1479488ff62c87358e06716e814394e6a56df14c",
+ "nomad-unitov-measurements @ git+https://github.com/C1AFFA/nomad-plugin-template.git@fc37a9ca621638d8e2cca05c51b343d284b6677e",
  #"nomad-gui>=2.0.0a2.dev459",
  #"nomad-simulations==0.6.0",
  #"nomad-simulation-apps==0.1.2",
