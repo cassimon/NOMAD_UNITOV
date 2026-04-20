@@ -1,9 +1,21 @@
-![docker image](https://github.com/cassimon/NOMAD_UNITOV/actions/workflows/docker-publish.yml/badge.svg)
+![docker image](https://github.com/FAIRmat-NFDI/nomad-distro-template/actions/workflows/docker-publish.yml/badge.svg)
 
+# NOMAD Oasis Distribution *Template*
+This repository is a template for creating your own custom NOMAD Oasis distribution image.
+Click [here](https://github.com/new?template_name=nomad-distro-template&template_owner=FAIRmat-NFDI)
+to use this template, or click the `Use this template` button in the upper right corner of
+the main GitHub page for this template.
 
-# cassimon's NOMAD Oasis Distribution
+> [!CAUTION]
+> The templated repository will run a GitHub action on creation which might take a few minutes.
+> After the workflow finishes you should refresh the page and this message should disappear.
+> If this message persists you might need to trigger the workflow manually by navigating to the
+> "Actions" tab at the top, clicking "Template Repository Initialization" on the left side,
+> and triggering it by clicking "Run workflow" under the "Run workflow" button on the right.
 
-This is the NOMAD Oasis distribution of cassimon.
+# FAIRmat-NFDI's NOMAD Oasis Distribution
+
+This is the NOMAD Oasis distribution of FAIRmat-NFDI.
 Below are instructions for how to [deploy this distribution](#deploying-the-distribution)
 and how to customize it through [adding plugins](#adding-a-plugin).
 
@@ -23,17 +35,18 @@ and how to customize it through [adding plugins](#adding-a-plugin).
 
 In this README you will find instructions for:
 1. [Deploying the distribution](#deploying-the-distribution)
-2. [Configuring Worker Replicas and Resource Limits](#configuring-worker-replicas-and-resource-limits)
-3. [Adding a plugin](#adding-a-plugin)
-4. [The jupyter image](#the-jupyter-image)
-5. [Using Docker image via plugin](#using-docker-image-via-plugin)
-6. [Automated unit and example upload tests in CI](#automated-unit-and-example-upload-tests-in-ci)
-7. [Setup regular package updates with Dependabot](#set-up-regular-package-updates-with-dependabot)
-8. [Customizing Documentation](#customizing-documentation)
-9. [Backing up the Oasis](#backing-up-the-oasis)
-10. [Enabling NOMAD Actions](#enabling-nomad-actions)
-11. [Updating the distribution from the template](#updating-the-distribution-from-the-template)
-12. [Solving common issues](#faqtrouble-shooting)
+2. [Deploying on Kubernetes (Quick Start)](#deploying-on-kubernetes-quick-start)
+3. [Configuring Worker Replicas and Resource Limits](#configuring-worker-replicas-and-resource-limits)
+4. [Adding a plugin](#adding-a-plugin)
+5. [The jupyter image](#the-jupyter-image)
+6. [Using Docker image via plugin](#using-docker-image-via-plugin)
+7. [Automated unit and example upload tests in CI](#automated-unit-and-example-upload-tests-in-ci)
+8. [Setup regular package updates with Dependabot](#set-up-regular-package-updates-with-dependabot)
+9. [Customizing Documentation](#customizing-documentation)
+10. [Backing up the Oasis](#backing-up-the-oasis)
+11. [Enabling NOMAD Actions](#enabling-nomad-actions)
+12. [Updating the distribution from the template](#updating-the-distribution-from-the-template)
+13. [Solving common issues](#faqtrouble-shooting)
 
 ## Deploying the distribution
 
@@ -49,16 +62,16 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
 2. Clone the repository or download the repository as a zip file.
 
     ```sh
-    git clone https://github.com/cassimon/NOMAD_UNITOV.git
-    cd NOMAD_UNITOV
+    git clone https://github.com/FAIRmat-NFDI/nomad-distro-template.git
+    cd nomad-distro-template
     ```
 
     or
 
     ```sh
-    curl-L -o NOMAD_UNITOV.zip "https://github.com/cassimon/NOMAD_UNITOV/archive/main.zip"
-    unzip NOMAD_UNITOV.zip
-    cd NOMAD_UNITOV
+    curl-L -o nomad-distro-template.zip "https://github.com/FAIRmat-NFDI/nomad-distro-template/archive/main.zip"
+    unzip nomad-distro-template.zip
+    cd nomad-distro-template
     ```
 
 3. _On Linux only,_ recursively change the owner of the `.volumes` directory to the nomad user (1000)
@@ -114,11 +127,11 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
       For testing, you can create a [self-signed certificate](https://en.wikipedia.org/wiki/Self-signed_certificate). Note that self-signed certificates are not recommended for production since they are not trusted by browsers. You can generate one with:
 
       ```sh
-      mkdir ssl
+      mkdir tls
       openssl req -x509 -nodes -days 365 \
         -newkey rsa:2048 \
-        -keyout ./ssl/selfsigned.key \
-        -out ./ssl/selfsigned.crt \
+        -keyout ./tls/selfsigned.key \
+        -out ./tls/selfsigned.crt \
         -subj "/CN=localhost"
       ```
 
@@ -129,7 +142,8 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
 
    + # HTTPS
    + - ./configs/nginx_https.conf:/etc/nginx/conf.d/default.conf:ro
-   + - ./ssl:/etc/nginx/ssl:ro  # Your certificate files
+   + - ./tls/selfsigned.crt:/etc/nginx/tls/mounted-nomad-oasis.crt:ro  # Path to your TLS certificate
+   + - ./tls/selfsigned.key:/etc/nginx/tls/mounted-nomad-oasis.key:ro  # Path to your TLS private key
    ```
 
 7. And run it with docker compose in detached (--detach or -d) mode
@@ -183,7 +197,7 @@ You can find more details on setting up and maintaining an Oasis in the NOMAD do
 ### For an existing Oasis
 
 If you already have an Oasis running you only need to change the image being pulled in
-your `docker-compose.yaml` with `ghcr.io/cassimon/nomad_unitov:main` for the services
+your `docker-compose.yaml` with `ghcr.io/fairmat-nfdi/nomad-distro-template:main` for the services
 `worker`, `app`, `north`, and `logtransfer`.
 
 If you want to use the `nomad.yaml` from this repository you also need to comment out
@@ -196,6 +210,80 @@ volumes:
 ```
 
 To run the new image you can follow steps 5. and 7. [above](#for-a-new-oasis).
+
+## Deploying on Kubernetes (Quick Start)
+
+As an alternative to Docker Compose, you can deploy NOMAD Oasis on Kubernetes using Helm.
+A minimal `values.yaml` for single-node clusters (Minikube, Kind, k3s, etc.) is provided in the [`kubernetes/`](kubernetes/) directory.
+
+1. Make sure you have [Helm](https://helm.sh/docs/intro/install/) (>= 3.x) and [kubectl](https://kubernetes.io/docs/tasks/tools/) installed, and a running Kubernetes cluster.
+
+2. Add the NOMAD Helm repository:
+
+    ```sh
+    helm repo add nomad https://fairmat-nfdi.github.io/nomad-helm-charts
+    helm repo update
+    ```
+
+3. Install the chart using the provided values file:
+
+    ```sh
+    helm install nomad-oasis nomad/default -f kubernetes/values.yaml --timeout 15m
+    ```
+
+4. Watch the pods come up:
+
+    ```sh
+    kubectl get pods -w
+    ```
+
+5. Once all pods are running, access the Oasis via port-forward:
+
+    ```sh
+    kubectl port-forward svc/nomad-oasis-proxy 80:80
+    ```
+
+    Then open [http://localhost/nomad-oasis](http://localhost/nomad-oasis) in your browser.
+
+> [!NOTE]
+> **Secrets:** The API secret is auto-generated by default. For production, you can
+> provide your own by creating a Kubernetes secret and referencing it in your values:
+>
+> ```sh
+> kubectl create secret generic nomad-api-secret --from-literal=password='<your-secret-here>'
+> ```
+>
+> ```yaml
+> # in kubernetes/values.yaml
+> nomad:
+>   secrets:
+>     api:
+>       existingSecret: "nomad-api-secret"
+>       key: password
+>       autoGenerate: false
+> ```
+>
+> If JupyterHub (NORTH) is enabled, you should also set the hub service API token:
+>
+> ```sh
+> kubectl create secret generic nomad-hub-token --from-literal=token='<your-token-here>'
+> ```
+>
+> ```yaml
+> nomad:
+>   secrets:
+>     north:
+>       hubServiceApiToken:
+>         existingSecret: "nomad-hub-token"
+>         key: token
+> ```
+
+> [!TIP]
+> To use your own distribution image, update the `nomad.image` section in `kubernetes/values.yaml`
+> to point to your container registry (e.g. `ghcr.io/<your-org>/<your-repo>:main`).
+
+For the full list of Helm chart options, environment-specific values files (AWS, Minikube, Kind),
+and advanced configuration, see the [nomad-helm-charts](https://github.com/FAIRmat-NFDI/nomad-helm-charts) repository.
 
 ## Configuring Worker Replicas and Resource Limits
 
@@ -223,7 +311,7 @@ Adjust these values based on your server's available resources to optimize perfo
 
 ## Adding a plugin
 
-By default, no plugins are included in this distribution. You can find a list of available NOMAD plugins [here](https://nomad-lab.eu/prod/v1/oasis/gui/search/plugins). For a list of official plugins provided by FAIRmat, please see [here](https://github.com/cassimon/.github/blob/main/profile/README.md). For inspiration, you can also check the list of [plugins that are installed on the production NOMAD deployment hosted by FAIRmat](https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-distro/-/raw/main/pyproject.toml?ref_type=heads).
+By default, no plugins are included in this distribution. You can find a list of available NOMAD plugins [here](https://nomad-lab.eu/prod/v1/oasis/gui/search/plugins). For a list of official plugins provided by FAIRmat, please see [here](https://github.com/FAIRmat-NFDI/.github/blob/main/profile/README.md). For inspiration, you can also check the list of [plugins that are installed on the production NOMAD deployment hosted by FAIRmat](https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-distro/-/raw/main/pyproject.toml?ref_type=heads).
 
 To add a new plugin to the docker image you should add it to the plugins table in the [`pyproject.toml`](pyproject.toml) file.
 
@@ -282,7 +370,7 @@ Note that the `base-notebook` image is more lightweight and uses less disk space
 The image is quite large and might cause a timeout the first time it is run. In order to avoid this you can pre pull the image with:
 
 ```sh
-docker pull ghcr.io/cassimon/nomad_unitov/jupyter:main
+docker pull ghcr.io/fairmat-nfdi/nomad-distro-template/jupyter:main
 ```
 
 If you want additional python packages to be available to all users in the jupyter hub you can add those to the jupyter table in the [`pyproject.toml`](pyproject.toml):
@@ -302,7 +390,7 @@ jupyter = [
 
 The recommended way to integrate the Docker image e.g., Jupyter into your NOMAD Oasis is through the plugin entry point system. This approach is cleaner, more maintainable, and automatically handles all necessary configurations.
 
-[`nomad-north-jupyter`](https://github.com/cassimon/nomad-north-jupyter) is a NOMAD plugin that provides a containerized JupyterLab environment for interactive analysis within NORTH (NOMAD Remote Tools Hub). This plugin has been added to this distribution by default via `pyproject.toml`. In `nomad.yaml`, the `NORTHTool` entry point is configured to use the [custom Jupyter image](#the-jupyter-image) built in this repository.
+[`nomad-north-jupyter`](https://github.com/FAIRmat-NFDI/nomad-north-jupyter) is a NOMAD plugin that provides a containerized JupyterLab environment for interactive analysis within NORTH (NOMAD Remote Tools Hub). This plugin has been added to this distribution by default via `pyproject.toml`. In `nomad.yaml`, the `NORTHTool` entry point is configured to use the [custom Jupyter image](#the-jupyter-image) built in this repository.
 
 ## Automated Unit and Example Upload Tests in CI
 
@@ -324,9 +412,9 @@ This automated process helps ensure that your dependencies stay up to date, impr
 
 ## Customizing Documentation
 
-By default, documentation is built using the [nomad-docs](https://github.com/cassimon/nomad-docs) repository. However, if you'd like to customize the documentation for your Oasis instance, you can easily do so.
+By default, documentation is built using the [nomad-docs](https://github.com/FAIRmat-NFDI/nomad-docs) repository. However, if you'd like to customize the documentation for your Oasis instance, you can easily do so.
 
-1. First, [fork the nomad-docs repository](https://github.com/cassimon/nomad-docs/fork).
+1. First, [fork the nomad-docs repository](https://github.com/FAIRmat-NFDI/nomad-docs/fork).
 2. Make your desired changes in your fork.
 3. Update the `NOMAD_DOCS_REPO` variable in the [.github/workflows/docker-publish.yml](./.github/workflows/docker-publish.yml#L19) file to point to the URL of your forked repository.
 
@@ -425,7 +513,7 @@ Ideally all workflows should be triggered automatically but you might need to ru
 
 ## FAQ/Trouble shooting
 
-_I get an_ `Error response from daemon: Head "https://ghcr.io/v2/cassimon/NOMAD_UNITOV/manifests/main": unauthorized`
+_I get an_ `Error response from daemon: Head "https://ghcr.io/v2/FAIRmat-NFDI/nomad-distro-template/manifests/main": unauthorized`
 _when trying to pull my docker image._
 
 Most likely you have not made the package public or provided a personal access token (PAT).
