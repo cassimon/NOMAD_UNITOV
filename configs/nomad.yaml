@@ -33,6 +33,4 @@ elastic:
 
 auth:
   authorized_users:
-    - user1@example.com
-    - user2@example.com
-    - username3
+    - ternes@ing.uniroma2.it
