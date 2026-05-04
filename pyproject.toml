@@ -29,7 +29,6 @@ repository = "https://github.com/cassimon/nomad_unitov"
 # Add your plugins to the list below.
 plugins = [
  "nomad-north-jupyter>=0.2.5",
- "perovskite-solar-cell-database @ git+https://github.com/FAIRmat-NFDI/nomad-perovskite-solar-cells-database.git@v0.1.1",
  "nomad-chose @ git+https://github.com/cassimon/nomad-chose.git@00b7c61c29f81b59b947a690c5a4975486b8a33b"
 ]
 jupyter = ["jupyter-events"]
