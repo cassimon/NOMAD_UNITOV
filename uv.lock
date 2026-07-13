@@ -3015,7 +3015,7 @@ dependencies = [
 [[package]]
 name = "nomad-chose"
 version = "0.1.0"
-source = { git = "https://github.com/cassimon/nomad-chose.git?rev=0916e302d71aeaeee9ec673654ee21dd7b3b60a3#0916e302d71aeaeee9ec673654ee21dd7b3b60a3" }
+source = { git = "https://github.com/cassimon/nomad-chose.git?rev=aa8ab9d8efea880e3f35ff320f1d160f2d267167#aa8ab9d8efea880e3f35ff320f1d160f2d267167" }
 dependencies = [
     { name = "nomad-lab" },
     { name = "nomad-perovskite-solar-cell-sample-plains" },
@@ -3043,7 +3043,7 @@ plugins = [
 [package.metadata]
 requires-dist = [
     { name = "jupyter-events", marker = "extra == 'jupyter'" },
-    { name = "nomad-chose", marker = "extra == 'plugins'", git = "https://github.com/cassimon/nomad-chose.git?rev=0916e302d71aeaeee9ec673654ee21dd7b3b60a3" },
+    { name = "nomad-chose", marker = "extra == 'plugins'", git = "https://github.com/cassimon/nomad-chose.git?rev=aa8ab9d8efea880e3f35ff320f1d160f2d267167" },
     { name = "nomad-lab", extras = ["dev", "infrastructure"], marker = "extra == 'dev'", specifier = "==1.4.2" },
     { name = "nomad-lab", extras = ["infrastructure"], specifier = "==1.4.2" },
     { name = "nomad-north-jupyter", marker = "extra == 'plugins'", specifier = ">=0.2.5" },
@@ -3163,7 +3163,7 @@ wheels = [
 [[package]]
 name = "nomad-perovskite-solar-cell-sample-plains"
 version = "0.1.0"
-source = { git = "https://github.com/cassimon/nomad-perovskite-solar-cell-sample-plains.git?rev=50c71287331c01f519cce330ba1d097224c08cf4#50c71287331c01f519cce330ba1d097224c08cf4" }
+source = { git = "https://github.com/cassimon/nomad-perovskite-solar-cell-sample-plains.git?rev=0aed39d41459a1b5056734d80486bdabf748bcec#0aed39d41459a1b5056734d80486bdabf748bcec" }
 dependencies = [
     { name = "nomad-baseclasses" },
     { name = "nomad-lab" },
