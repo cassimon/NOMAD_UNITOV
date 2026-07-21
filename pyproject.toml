@@ -29,7 +29,7 @@ repository = "https://github.com/cassimon/nomad_unitov"
 # Add your plugins to the list below.
 plugins = [
  "nomad-north-jupyter>=0.2.5",
- "nomad-chose @ git+https://github.com/cassimon/nomad-chose.git@c17181cd3790255cd50f899df86956280780d68c"
+ "nomad-chose @ git+https://github.com/cassimon/nomad-chose.git@53f9a0141d41a034f24cc06a0047938379384d3c"
 ]
 jupyter = ["jupyter-events"]
 gpu-action = []
